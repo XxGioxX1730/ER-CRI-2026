@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserisci Codice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Sfondo sfocato */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('background.jpg'); /* Sostituisci con la tua immagine */
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            z-index: -1;
+        }
+
+        /* Container principale */
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .error {
+            color: #ff6b6b;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        /* Sezione video (nascosta inizialmente) */
+        .video-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .video-container.active {
+            display: flex;
+        }
+
+        video {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sfondo sfocato -->
+    <div class="background"></div>
+
+    <!-- Form di inserimento codice -->
+    <div class="container" id="codeForm">
+        <h1>Inserisci Codice</h1>
+        <input type="text" id="codeInput" placeholder="Codice..." maxlength="10" autofocus>
+        <button onclick="checkCode()">Conferma</button>
+        <div class="error" id="errorMsg"></div>
+    </div>
+
+    <!-- Container video (nascosto) -->
+    <div class="video-container" id="videoContainer">
+        <button class="close-btn" onclick="closeVideo()">✕ Chiudi</button>
+        <video id="videoPlayer" controls autoplay>
+            <source src="video.mp4" type="video/mp4"> <!-- Sostituisci con il tuo video -->
+            Il tuo browser non supporta il tag video.
+        </video>
+    </div>
+
+    <script>
+        const correctCode = "325";
+
+        // Permetti l'invio con Enter
+        document.getElementById('codeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkCode();
+            }
+        });
+
+        function checkCode() {
+            const input = document.getElementById('codeInput').value;
+            const errorMsg = document.getElementById('errorMsg');
+
+            if (input === correctCode) {
+                // Codice corretto - mostra il video
+                document.getElementById('codeForm').style.display = 'none';
+                document.getElementById('videoContainer').classList.add('active');
+                errorMsg.textContent = '';
+            } else {
+                // Codice errato
+                errorMsg.textContent = 'Codice errato. Riprova.';
+                document.getElementById('codeInput').value = '';
+                document.getElementById('codeInput').focus();
+            }
+        }
+
+        function closeVideo() {
+            document.getElementById('videoContainer').classList.remove('active');
+            document.getElementById('codeForm').style.display = 'block';
+            document.getElementById('videoPlayer').pause();
+            document.getElementById('codeInput').value = '';
+            document.getElementById('codeInput').focus();
+        }
+    </script>
+</body>
+</html>
